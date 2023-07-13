@@ -57,7 +57,7 @@ account = os.getenv('GOOGLE_ACCOUNT')
 password = os.getenv('GOOGLE_PASSWORD')
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-recipients = ["yeonguk1216@gmail.com"] ## 보낼 사람들의 이메일 리스트 입력
+recipients = [""] ## 보낼 사람들의 이메일 리스트 입력
 subject = "메일링 코드 테스트입니다."
 content = "content.md"
 
