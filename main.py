@@ -1,6 +1,8 @@
 import os
 import smtplib
 import re
+import markdown
+
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
@@ -34,7 +36,11 @@ class EmailSender:
             message["From"] = self.account
             message["To"] = recipient
 
-            content_part = MIMEText(content, "plain")
+            with open(content, 'r') as file:
+                markdown_content = file.read()
+                html_content = markdown.markdown(markdown_content)
+
+            content_part = MIMEText(html_content, "html")
             message.attach(content_part)
 
             try:
@@ -51,9 +57,9 @@ account = os.getenv('GOOGLE_ACCOUNT')
 password = os.getenv('GOOGLE_PASSWORD')
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-recipients = [""] ## 보낼 사람들의 이메일 리스트 입력
+recipients = ["yeonguk1216@gmail.com"] ## 보낼 사람들의 이메일 리스트 입력
 subject = "메일링 코드 테스트입니다."
-content = "안녕하세요. 추영욱이라고 합니다.\n 메일링 테스트입니다.\n 감사합니다\n\n"
+content = "content.md"
 
 sender.connect()
 sender.send_email(recipients, subject, content)
