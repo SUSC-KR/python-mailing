@@ -4,10 +4,12 @@
 
 ```
 .
-├── .env
 ├── README.md
+├── bcc-to.csv
+├── cc-to.csv
 ├── content.md
-└── main.py
+├── main.py
+└── send-to.csv
 
 ```
 
@@ -19,8 +21,16 @@
 ```
 GOOGLE_ACCOUNT = "구글 아이디"
 GOOGLE_PASSWORD = "앱 2차 비밀번호"
-CC_MAIL = "참조 메일"
 ```
+5. 아래의 설명에 맞게 파일을 준비해줍니다.
+	- 보낼 사람(To): `send-to.csv`
+	- 참조 (Cc): `cc-to.csv`
+	- 비밀참조(Bcc): `bcc-to.csv`
+	``` 
+	0
+	test0@mail.com
+	test1@mail.com
+	```
 
-5. content.md에 이메일 내용을 작성한다.
-6. main.py의 recipients에 보낼 사람들의 이메일들을 추가합니다.
+6. `content.md`에 이메일 내용을 작성한다.
+7. `subject`를 수정하고 `python main.py`를 실행합니다.
