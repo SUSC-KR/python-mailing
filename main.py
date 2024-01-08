@@ -2,6 +2,7 @@ import os
 import smtplib
 import re
 import markdown
+import pandas as pd
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -23,18 +24,16 @@ class EmailSender:
         if self.smtp:
             self.smtp.quit()
 
-    def send_email(self, recipients, subject, content):
-        reg = "^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$"  # 이메일 유효성 검사를 위한 정규표현식
-
+    def send_email(self, recipients, subject, cc, content):
         for recipient in recipients:
-            if not re.match(reg, recipient):
-                print(f"받으실 메일 주소를 정확히 입력하십시오: {recipient}")
-                continue
 
             message = MIMEMultipart()
             message["Subject"] = subject
             message["From"] = self.account
             message["To"] = recipient
+
+            if cc:
+                message["Cc"] = cc
 
             with open(content, 'r') as file:
                 markdown_content = file.read()
@@ -57,10 +56,14 @@ account = os.getenv('GOOGLE_ACCOUNT')
 password = os.getenv('GOOGLE_PASSWORD')
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-recipients = [""] ## 보낼 사람들의 이메일 리스트 입력
-subject = "메일링 코드 테스트입니다."
+participants = pd.read_csv("./parti.csv")
+participants = participants['0']
+
+recipients = list(participants) ## 보낼 사람들의 이메일 리스트 입력
+subject = "Test Mail"
+cc = os.getenv('CC_MAIL') ## 참조할 사람들의 이메일 리스트 입력
 content = "content.md"
 
 sender.connect()
-sender.send_email(recipients, subject, content)
+sender.send_email(recipients, subject, cc,  content)
 sender.disconnect()
