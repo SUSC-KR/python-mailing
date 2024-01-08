@@ -17,8 +17,9 @@
 4. .env 파일에 다음과 같이 작성한다.
 
 ```
-GOOGLE_ACCOUNT = 구글 아이디
-GOOGLE_PASSWORD = 앱 비밀번호
+GOOGLE_ACCOUNT = "구글 아이디"
+GOOGLE_PASSWORD = "앱 2차 비밀번호"
+CC_MAIL = "참조 메일"
 ```
 
 5. content.md에 이메일 내용을 작성한다.
