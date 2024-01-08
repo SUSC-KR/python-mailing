@@ -24,7 +24,7 @@ class EmailSender:
         if self.smtp:
             self.smtp.quit()
 
-    def send_email(self, recipients, subject, cc, content):
+    def send_email(self, recipients, subject, cc, bcc, content):
         for recipient in recipients:
 
             message = MIMEMultipart()
@@ -34,6 +34,9 @@ class EmailSender:
 
             if cc:
                 message["Cc"] = cc
+
+            if bcc:
+                message["Bcc"] = ", ".join(bcc)
 
             with open(content, 'r') as file:
                 markdown_content = file.read()
@@ -56,14 +59,18 @@ account = os.getenv('GOOGLE_ACCOUNT')
 password = os.getenv('GOOGLE_PASSWORD')
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-participants = pd.read_csv("./parti.csv")
+participants = pd.read_csv("./sent-to.csv")
 participants = participants['0']
 
+bccs = pd.read_csv("./bcc-to.csv")
+bccs = bccs['0']
+
 recipients = list(participants) ## 보낼 사람들의 이메일 리스트 입력
-subject = "Test Mail"
+subject = "Test BCC Mail1"
 cc = os.getenv('CC_MAIL') ## 참조할 사람들의 이메일 리스트 입력
+bcc = list(bccs) ## 숨은 참조할 사람들의 이메일 리스트 입력
 content = "content.md"
 
 sender.connect()
-sender.send_email(recipients, subject, cc,  content)
+sender.send_email(recipients, subject, cc, bcc, content)
 sender.disconnect()
