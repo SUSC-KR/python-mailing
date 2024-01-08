@@ -33,10 +33,14 @@ class EmailSender:
             message["To"] = recipient
 
             if cc:
-                message["Cc"] = cc
+                cc_mail = ', '.join(cc)
+                message["Cc"] = cc_mail
 
             if bcc:
-                message["Bcc"] = ", ".join(bcc)
+                bcc_mail = ', '.join(bcc)
+                message["Bcc"] = bcc_mail
+
+            recipients_list = [recipient] + cc + bcc
 
             with open(content, 'r') as file:
                 markdown_content = file.read()
@@ -46,10 +50,10 @@ class EmailSender:
             message.attach(content_part)
 
             try:
-                self.smtp.sendmail(self.account, recipient, message.as_string())
-                print(f"정상적으로 메일이 발송되었습니다: {recipient}")
+                self.smtp.sendmail(self.account, recipients_list, message.as_string())
+                print(f"정상적으로 메일이 발송되었습니다: {recipients_list}")
             except Exception as e:
-                print(f"메일 발송 중 오류가 발생했습니다: {recipient} - {str(e)}")
+                print(f"메일 발송 중 오류가 발생했습니다: {recipients_list} - {str(e)}")
 
 
 load_dotenv()
@@ -59,15 +63,19 @@ account = os.getenv('GOOGLE_ACCOUNT')
 password = os.getenv('GOOGLE_PASSWORD')
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-participants = pd.read_csv("./sent-to.csv")
+participants = pd.read_csv("./send-to.csv")
 participants = participants['0']
+
+ccs = pd.read_csv("./cc-to.csv")
+ccs = ccs['0']
 
 bccs = pd.read_csv("./bcc-to.csv")
 bccs = bccs['0']
 
 recipients = list(participants) ## 보낼 사람들의 이메일 리스트 입력
-subject = "Test BCC Mail1"
-cc = os.getenv('CC_MAIL') ## 참조할 사람들의 이메일 리스트 입력
+subject = "이메일 제목"
+
+cc = list(ccs) ## 참조할 사람들의 이메일 리스트 입력
 bcc = list(bccs) ## 숨은 참조할 사람들의 이메일 리스트 입력
 content = "content.md"
 
