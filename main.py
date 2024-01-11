@@ -36,10 +36,6 @@ class EmailSender:
                 cc_mail = ', '.join(cc)
                 message["Cc"] = cc_mail
 
-            if bcc:
-                bcc_mail = ', '.join(bcc)
-                message["Bcc"] = bcc_mail
-
             recipients_list = [recipient] + cc + bcc
 
             with open(content, 'r') as file:
@@ -73,7 +69,7 @@ bccs = pd.read_csv("./bcc-to.csv")
 bccs = bccs['0']
 
 recipients = list(participants) ## 보낼 사람들의 이메일 리스트 입력
-subject = "이메일 제목"
+subject = "[운영진테스트메일]SUSC Winter OT 티켓 안내 및 CS101 스터디 모집"
 
 cc = list(ccs) ## 참조할 사람들의 이메일 리스트 입력
 bcc = list(bccs) ## 숨은 참조할 사람들의 이메일 리스트 입력
