@@ -1,12 +1,11 @@
-import os
 import smtplib
 import re
 import markdown
 import pandas as pd
 
+from settings import *
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from dotenv import load_dotenv
 
 class EmailSender:
     def __init__(self, smtp_server, smtp_port, account, password):
@@ -52,28 +51,27 @@ class EmailSender:
                 print(f"메일 발송 중 오류가 발생했습니다: {recipients_list} - {str(e)}")
 
 
-load_dotenv()
 smtp_server = "smtp.gmail.com"
-smtp_port = 465
-account = os.getenv('GOOGLE_ACCOUNT')
-password = os.getenv('GOOGLE_PASSWORD')
+smtp_port = SMTP_PORT
+account = ACCOUNT
+password = PASSWORD
 sender = EmailSender(smtp_server, smtp_port, account, password)
 
-participants = pd.read_csv("./send-to.csv")
+participants = pd.read_csv(SEND_TO_PATH)
 participants = participants['0']
 
-ccs = pd.read_csv("./cc-to.csv")
+ccs = pd.read_csv(CCS_PATH)
 ccs = ccs['0']
 
-bccs = pd.read_csv("./bcc-to.csv")
+bccs = pd.read_csv(BCCS_PATH)
 bccs = bccs['0']
 
 recipients = list(participants) ## 보낼 사람들의 이메일 리스트 입력
-subject = "[운영진테스트메일]SUSC Winter OT 티켓 안내 및 CS101 스터디 모집"
+subject = MAIL_TITLE
 
 cc = list(ccs) ## 참조할 사람들의 이메일 리스트 입력
 bcc = list(bccs) ## 숨은 참조할 사람들의 이메일 리스트 입력
-content = "content.md"
+content = MAIL_BODY_PATH
 
 sender.connect()
 sender.send_email(recipients, subject, cc, bcc, content)
