@@ -1,5 +1,51 @@
+# 환경 파일
 .env
 
+# Python 캐시 파일
 __pycache__/
+*.py[cod]
+*$py.class
 
+# 가상 환경 디렉터리
+.venv/
+env/
+venv/
+
+# 운영 체제별 파일
+.DS_Store
+Thumbs.db
+
+# IDE 및 편집기 파일
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# 로그 및 디버그 출력 파일
+*.log
+
+# 데이터 파일
 *.csv
+*.sqlite3
+*.db
+
+# 테스트 관련 파일
+coverage/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# 빌드 출력 파일
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# 기타
+*.bak
+*.swp
